@@ -16,7 +16,7 @@ async function myAnalysis(context, scope) {
   // Create a variable called payload with the value sent by the device
   // change payload to the name of you variable here ||
   //                                                 \/
-  context.log('1 analysis started')
+  context.log('analysis started')
 
   const env_vars = Utils.env_to_obj(context.environment);
   if (!env_vars.fctoken) return context.log('Missing device_token environment variable');
