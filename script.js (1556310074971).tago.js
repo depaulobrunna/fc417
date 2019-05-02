@@ -25,25 +25,32 @@ async function myAnalysis(context, scope) {
   const device = new Device(env_vars.fctoken);
   var data = {}
   data = scope.find(x => x.variable === "payload").value
-  context.log(`2 Data is ${data}`);
+  //context.log(`2 Data is ${data}`);
+  //const payload = Number(data);
+  //context.log(`payload is ${payload}`);
   var payload = {}
   payload = Buffer.from(data, 'base64').toString('utf8');
-  context.log(`3 payload is ${payload}`);
+  //context.log(`3 payload is ${payload}`);
 
     // Create separate the string into two hexadecimal values
     var values = Buffer.from(data, 'base64');
-    context.log(`4 values ${values}`);
+    //context.log(`4 values ${values}`);
     
-    var length = values.readUInt8(0);
-    context.log(`5 length is ${length}`);
-    context.log('6')
+    var pack1 = values.readUInt8(0);
+    //var pack2 = values.readUInt8(42);
+    //var pack3 = values.readUInt8(43);
+
+    context.log(`length ${pack1}`);
+    //context.log(`6 ${pack2}`);
+    //context.log(`7 ${pack3}`);
+
+    context.log('pass')
     // Create the two variables Temperature and Humidity to send to TagoIO
     const variables = [{
-      variable: 'length',
-      value: length,
-      unit: 'H'
+      variable: 'id',
+      value: pack1
     }];
-    context.log('7')
+    context.log('finish')
 
     // Insert the actual variables temperature and humidity to TagoIO
     device.insert(variables).then(context.log('Successfully Inserted')).catch(error => context.log('Error when inserting:', error));
