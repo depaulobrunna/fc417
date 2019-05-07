@@ -34,30 +34,31 @@ async function myAnalysis(context, scope) {
   
   var payload = {}
   payload = Buffer.from(data, 'base64').toString('utf8');
-  //context.log(`3 payload is ${payload}`);
+  context.log(`3 payload is ${payload}`);
     var values = Buffer.from(data, 'base64');
-    //context.log(`values is ${values}`);
+    context.log(`values is ${values}`);
+    var bbb = values.readUIntBE(0,1).toString(2);
+    var ccc = values.readUIntBE(1,1).toString(2);
     var today_value = values.readUIntBE(15, 1).toString(2); //buf.readUIntLE(offset, byteLength) suports 6 bytes, tostring(2) converte em binario
+    var today_multip = values.readUIntBE(16, 1).toString(2);
     var yesterday_value = values.readUIntBE(21, 1).toString(2);
+    var yesterday_multip = values.readUIntBE(21, 1).toString(2);
     var before_yesterday_value = values.readUIntBE(27, 1).toString(2);
-    //context.log(`today value ${today_value}`);
-    //context.log(`read1`);
-    today = bcd2number(today_value);
-    yesterday = bcd2number(yesterday_value);
-    before_yesterday = bcd2number(before_yesterday_value);
-    
+    var before_yesterday_multip = values.readUIntBE(27, 1).toString(2);
+    context.log(`today value ${today_value} multip: ${today_multip}.`);
+    context.log(`bbb = ${bbb} and ccc = ${ccc}`);
    const variables = [{
       variable: 'valor_atual',
       value: vari,
       unit: 'm3'
-    //}, {
-      //variable: 'yesterday_value',
-      //value: yesterday_value,
-      //unit: 'Hz'
-    //}, {
-      //variable: 'before_yesterday_value',
-      //value: before_yesterday_value,
-      //unit: 'Hz'
+    }, {
+      variable: 'valor_ontem',
+      value: yesterday,
+      unit: 'm3'
+    }, {
+      variable: 'valor_anteontem',
+      value: before_yesterday,
+      unit: 'm3'
   }];
 
     // Insert the actual variables temperature and humidity to TagoIO
@@ -66,4 +67,4 @@ async function myAnalysis(context, scope) {
   
 
 }
-module.exports = new Analysis(myAnalysis, 'YOUR-ANALYSIS-TOKEN');
+module.exports = new Analysis(myAnalysis, '');
