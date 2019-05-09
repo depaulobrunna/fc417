@@ -56,7 +56,7 @@ async function myAnalysis(context, scope) {
     //context.log(`test after function ${final_test}`);
 
     var before_yesterday_value = values.readUIntLE(28, 4).toString(16);
-    var finalbefyesterday = getFVal(test, values.readUIntBE(32, 2));
+    var finalbefyesterday = getFVal(before_yesterday_value, values.readUIntBE(32, 2));
     //context.log(`bef yesterday ${finalbefyesterday}`);
     //context.log(`multi before yesterday`, values.readUIntBE(32, 1));
     
