@@ -18,7 +18,7 @@ var getFVal = function(val, multip)
     0x14: 0.01,
     0x15: 0.1,
     0x16: 0.0,
-    0x02: 0.00001  
+    0x02: 0.0001  
   };
   return val * multiplier[multip];
 }
@@ -33,34 +33,31 @@ async function myAnalysis(context, scope) {
   var payload = {}
   payload = Buffer.from(data, 'base64').toString('utf8');
     var values = Buffer.from(data, 'base64');
-    //context.log(`pass`);
     
-    var acumulador = values.readUIntBE(11, 1).toString(16);
-    //context.log(`acumulador value ${acumulador}`);
-
-
     var today_value = values.readUIntLE(17, 4).toString(16);
     var finaltoday = getFVal(today_value, values.readUIntBE(16, 1));
-    //context.log(`today ${finaltoday}`);
+    context.log(`today ${finaltoday}`);
+    context.log(`multiplicador`, values.readUIntBE(22, 1).toString(16));
     
     var yesterday_value = values.readUIntLE(23, 4).toString(16);
     var finalyesterday = getFVal(yesterday_value, values.readUIntBE(22, 1));
-    //context.log(`yesterday ${finalyesterday}`);
+    context.log(`yesterday ${finalyesterday}`);
     
-
+    var before_yesterday_value = values.readUIntLE(28, 4).toString(16);
+    var finalbefyesterday = getFVal(before_yesterday_value, values.readUIntBE(32, 2));
+    context.log(`bef yesterday ${finalbefyesterday}`);
 
     //var test = values.readUIntLE(28, 4).toString(16);
     //context.log(`test value ${test}`);
     //context.log(`multiplicador`, values.readUIntBE(32, 2));
     //var final_test = getFVal(test, values.readUIntBE(32, 2));
     //context.log(`test after function ${final_test}`);
-
-    var before_yesterday_value = values.readUIntLE(28, 4).toString(16);
-    var finalbefyesterday = getFVal(before_yesterday_value, values.readUIntBE(32, 2));
-    //context.log(`bef yesterday ${finalbefyesterday}`);
-    //context.log(`multi before yesterday`, values.readUIntBE(32, 1));
+    context.log(`pass everything`);
+    //if(values.readUIntLE(35, 2) = 0x01)
+    //{
+    //  context.log(`LOW BATTERY!!`);
+    //}
     
-   
    const variables = [{
       variable: 'hoje',
       value: finaltoday,
