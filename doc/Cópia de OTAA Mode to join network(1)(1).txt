@@ -1,0 +1,22 @@
+OTAA Mode to join network£º
+
+AT+MODE=LWOTAA  //Set the mode
+
+AT+DR=AU915 //Set frequency
+
+AT+CH=NUM,0-7 //Set channel
+
+AT+ID //Check the information for module
+
+AT+KEY=NWKSKEY,"The key is from gateway"  //Set the network communication key
+
+AT+DELAY=RX1,5000
+
+AT+DELAY=RX2,6000
+
+AT+JOIN 
+
+AT+CMSG=1111111
+
+
+
