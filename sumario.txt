@@ -1,0 +1,17 @@
+1- inicio
+	1.1 reed switch
+	1.2 usart 
+	1.3 comandos AT
+
+2- registradores e comandos AT importantes
+
+3- setar 
+	3.1 I=0 
+	3.3 leitura do hidrometro para cte de pulso
+
+4- codigo
+	4.1- funçao de leitura do buffer(hex ou dec)
+	4.2- multiplicador (func)
+
+
+5- testes
