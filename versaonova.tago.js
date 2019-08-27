@@ -22,7 +22,7 @@ async function myAnalysis(context, scope)
   var display_conv;
 
   var data = {}
-  data = '553f0049005301000000000000009019082405440036001516'//scope.find(x => x.variable === "payload").value
+  data = '5533004900530100000090000000901908240510033600d816'//scope.find(x => x.variable === "payload").value
   context.log('data', data);
   
   var dev_id = data.slice(4, 12);
@@ -68,7 +68,7 @@ async function myAnalysis(context, scope)
     context.log('display conversao is', display_conv);
     if (medida_atual == 0)
     {
-      context.log('carai porra');
+      context.log('carai');
       display_virtual = display_real;
     }
     if (medida_atual != 0)
