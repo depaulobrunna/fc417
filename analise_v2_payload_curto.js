@@ -1,11 +1,3 @@
-/* 
- * Analysis Example
- * Generic Payload Parse
- * 
- * Learn how to parse from a hexadecimal raw payload into temperature and humidity variables
- * Tutorial: https://tago.elevio.help/en/articles/118
- */
-
 const Analysis = require('tago/analysis');
 const Device = require('tago/device');
 const Utils = require('tago/utils');
@@ -24,19 +16,24 @@ async function myAnalysis(context, scope)
 
   var data = {}
   data = scope.find(x => x.variable === "payload").value
-  //data = '4bed6404115bf8a362034e8e61dc9a006cdeaf095eb6b284a7'
-  //context.log('data', data);
+  //data = '56000049005300000010d8'
+  context.log('data', data);
   //context.log('tipo data', typeof data);
-  payload = Buffer.from(data);
-  //context.log(`payload ${payload}`);
-  //context.log('tipo payload', typeof payload);
+  const buffer = Buffer.from(data, 'hex');
+  //context.log('payload', buffer);
+  //context.log('tipo payload', typeof buffer);
   
-  var volume_acumulado = (buffer[6]| buffer[7] >> 8| buffer[8] >> 16| buffer[9] >> 24 );
+  var volume_acumulado = buffer.readUInt32BE(6);
+  context.log('volume', volume_acumulado);
 
   var status_buffer = buffer[1];
 
   var status_string;
 
+  if (status_buffer == 0)
+  {
+    status_string = 'ok';
+  }
   if (status_buffer == 1)
   {
     status_string = 'bateria fraca';
@@ -49,6 +46,7 @@ async function myAnalysis(context, scope)
   {
     status_string = 'bateria fraca e linha quebrada';
   }
+  context.log('STATUS BUFFER', status_string);
 
 
 
@@ -60,19 +58,17 @@ async function myAnalysis(context, scope)
 
   device.find(filter).then((result_array) => 
   {
-    const display_real = result_array[0].value;
-    display_conv = parseFloat(display_real);
-    //context.log('display conversao is', display_conv);
+    const display_real = (result_array[0].value) * 0.001;
+    context.log('display real is', display_real);
+
     if (volume_acumulado == 0)
     {
       display_virtual = display_real;
     }
     if (volume_acumulado != 0)
     {
-      medida_cov = (volume_acumulado * 0.001);
-      //context.log('medida de conversao', medida_cov);
-      display_virtual = parseFloat(display_real + medida_cov);
-      //context.log('display virtual:', display_virtual);
+      display_virtual = parseFloat(display_real + (volume_acumulado * 0.001));
+      context.log('display virtual:', display_virtual);
     }
     const variables = 
     [
