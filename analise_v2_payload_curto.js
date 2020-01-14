@@ -6,26 +6,16 @@ async function myAnalysis(context, scope)
 {
   context.log('analysis started')
   const env_vars = Utils.env_to_obj(context.environment);
-  if (!env_vars.device_token) return context.log('Missing device_token environment variable');
-  const device = new Device(env_vars.device_token);
-
-  var display_virtual;
-  var medida_cov;
-  var display_conv;
-
-
-  var data = {}
-  data = scope.find(x => x.variable === "payload").value
-  //data = '56000049005300000010d8'
-  context.log('data', data);
-  //context.log('tipo data', typeof data);
-  const buffer = Buffer.from(data, 'hex');
-  //context.log('payload', buffer);
-  //context.log('tipo payload', typeof buffer);
   
+  if (!env_vars.device_token) return context.log('Missing device_token environment variable');
+  
+  const device = new Device(env_vars.device_token);
+  var display_virtual;
+  var data = {}
+  //data = scope.find(x => x.variable === "payload").value
+  data = '56000049005300000010d8'
+  const buffer = Buffer.from(data, 'hex');
   var volume_acumulado = buffer.readUInt32BE(6);
-  context.log('volume', volume_acumulado);
-
   var status_buffer = buffer[1];
 
   var status_string;
@@ -46,9 +36,6 @@ async function myAnalysis(context, scope)
   {
     status_string = 'bateria fraca e linha quebrada';
   }
-  context.log('STATUS BUFFER', status_string);
-
-
 
   const filter = 
   {
@@ -59,7 +46,6 @@ async function myAnalysis(context, scope)
   device.find(filter).then((result_array) => 
   {
     const display_real = (result_array[0].value) * 0.001;
-    context.log('display real is', display_real);
 
     if (volume_acumulado == 0)
     {
@@ -68,7 +54,6 @@ async function myAnalysis(context, scope)
     if (volume_acumulado != 0)
     {
       display_virtual = parseFloat(display_real + (volume_acumulado * 0.001));
-      context.log('display virtual:', display_virtual);
     }
     const variables = 
     [
