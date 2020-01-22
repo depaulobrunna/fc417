@@ -12,12 +12,11 @@ async function myAnalysis(context, scope)
   const device = new Device(env_vars.device_token);
   var display_virtual;
   var data = {}
-  //data = scope.find(x => x.variable === "payload").value
-  data = '56000049005300000010d8'
+  data = scope.find(x => x.variable === "payload").value
+  //data = '56000049005300000010d8'
   const buffer = Buffer.from(data, 'hex');
   var volume_acumulado = buffer.readUInt32BE(6);
-  var status_buffer = buffer[1];
-
+  var status_buffer = (buffer[1]|252)^252;
   var status_string;
 
   if (status_buffer == 0)
